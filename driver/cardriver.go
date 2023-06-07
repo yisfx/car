@@ -207,6 +207,6 @@ func (driver *CarDriver) gear() {
 		l298nDriver.EN(gear * 8)
 	}
 }
-func (drier *CarDriver) GetGear() {
+func (drier *CarDriver) GetGear() int{
 	return gear
 }
