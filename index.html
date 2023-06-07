@@ -24,72 +24,111 @@
 <body>
 
     <div class="container">
-        <div class="row">
-            <div class="width-30 col-md-3"></div>
-            <div class="width-30 col-md-3">
-                <button class="btn btn-info" id="up" >上</button>
-            </div>
-        </div>
-        <div class="row">
-            <div class="width-30 col-md-3">
-                <button class="btn btn-info" id="left" >左</button>
-            </div>
-            <div class="width-30 col-md-3">
-                <button class="btn btn-light" disabled></button>
-            </div>
-            <div class="width-30 col-md-3">
-                <button class="btn btn-info" id="right" >右</button>
-            </div>
-        </div>
-        <div class="row">
-            <div class="width-30 col-md-3">
 
-            </div>
-            <div class="width-30 col-md-3">
-                <button class="btn btn-info" id="down" >下</button>
-            </div>
+        <div class="row">
+            <div class="col-md-8">
+                <div class="row">
+                    <div class="width-30 col-md-3"></div>
+                    <div class="width-30 col-md-3">
+                        <button class="btn btn-info" id="up">上</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="width-30 col-md-3">
+                        <button class="btn btn-info" id="left">左</button>
+                    </div>
+                    <div class="width-30 col-md-3">
+                        <button class="btn btn-light" disabled></button>
+                    </div>
+                    <div class="width-30 col-md-3">
+                        <button class="btn btn-info" id="right">右</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="width-30 col-md-3">
 
+                    </div>
+                    <div class="width-30 col-md-3">
+                        <button class="btn btn-info" id="down">下</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div></div>
+                <div class="row">
+                    <button class="btn btn-info" id="+">+</button>
+                </div>
+                <div id="gear">0</div>
+                <div class="row">
+                    <button class="btn btn-info" id="-">-</button>
+                </div>
+            </div>
         </div>
     </div>
     <script>
-function down(evt) {
-            $.post("./action", JSON.stringify({ Type: "press", Action: evt }), function () {
 
-            }, "json")
+        function AcctionCallBack(result) {
+            if (result.Result == "ok") {
+                document.getElementById("gear").innerText = result.Gear
+            } else {
+            }
+        }
+
+        function POST(request) {
+            $.ajax({
+                url: "/action",
+                type: "POST",
+                data: JSON.stringify(request),
+                dataType: "json",
+                success: AcctionCallBack
+            })
+        }
+
+        function down(evt) {
+            POST({ Type: "press", Action: evt });
         }
         function blur(evt) {
-
-            $.post("./action", JSON.stringify({ Type: "blur", Action: evt }), function () {
-
-            }, "json")
+            debugger
+            POST({ Type: "blur", Action: evt });
+        }
+        function gear(action) {
+            POST({ Type: "gear", Action: action });
         }
 
-document.getElementById("up").addEventListener("touchstart",function(){
-down("up")
-},false)
-document.getElementById("left").addEventListener("touchstart",function(){
-down("left")
-},false)
-document.getElementById("right").addEventListener("touchstart",function(){
-down("right")
-},false)
-document.getElementById("down").addEventListener("touchstart",function(){
-down("down")
-},false)
+        document.getElementById("up").addEventListener("touchstart", function () {
+            down("up")
+        }, false)
+        document.getElementById("left").addEventListener("touchstart", function () {
+            down("left")
+        }, false)
+        document.getElementById("right").addEventListener("touchstart", function () {
+            down("right")
+        }, false)
+        document.getElementById("down").addEventListener("touchstart", function () {
+            down("down")
+        }, false)
 
 
-document.getElementById("up").addEventListener("touchend",function(){
-    blur("up")
-},false)
-document.getElementById("left").addEventListener("touchend",function(){
-    blur("left")
-},false)
-document.getElementById("right").addEventListener("touchend",function(){
-    blur("right")
-},false)
-document.getElementById("down").addEventListener("touchend",function(){
-    blur("down")
-},false) 
+        document.getElementById("up").addEventListener("touchend", function () {
+            blur("up")
+        }, false)
+        document.getElementById("left").addEventListener("touchend", function () {
+            blur("left")
+        }, false)
+        document.getElementById("right").addEventListener("touchend", function () {
+            blur("right")
+        }, false)
+        document.getElementById("down").addEventListener("touchend", function () {
+            blur("down")
+        }, false)
+
+        document.getElementById("+").addEventListener("click", function () {
+            gear("+")
+        })
+        document.getElementById("-").addEventListener("click", function () {
+            gear("-")
+        })
+
     </script>
 </body>
 
