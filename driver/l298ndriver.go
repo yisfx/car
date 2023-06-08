@@ -11,8 +11,6 @@ var in2 rpio.Pin
 var in3 rpio.Pin
 var in4 rpio.Pin
 
-var pwm rpio.Pin
-
 func init() {
 	err := rpio.Open()
 	if err != nil {
@@ -20,54 +18,47 @@ func init() {
 	}
 
 	in3 = rpio.Pin(17)
-	in3.Output()
+	in3.Mode(rpio.Pwm)
+	in3.Freq(64000)
+
 	in4 = rpio.Pin(18)
-	in4.Output()
+	in4.Mode(rpio.Pwm)
+	in4.Freq(64000)
+
 	in1 = rpio.Pin(27)
-	in1.Output()
+	in1.Mode(rpio.Pwm)
+	in1.Freq(64000)
+
 	in2 = rpio.Pin(22)
-	in2.Output()
+	in2.Mode(rpio.Pwm)
+	in2.Freq(64000)
 
-	in1.Low()
-	in2.Low()
-	in3.Low()
-	in4.Low()
-
-	pwm = rpio.Pin(19)
-
-	pwm.Mode(rpio.Pwm)
-	pwm.Freq(64000)
-	pwm.DutyCycle(0, 32)
+	in3.DutyCycle(0, 32)
+	in4.DutyCycle(0, 32)
+	in1.DutyCycle(0, 32)
+	in2.DutyCycle(0, 32)
 
 }
 
-func setPin(pin rpio.Pin, f bool) {
-	if f {
-		pin.High()
-	} else {
-		pin.Low()
-	}
+func setPin(pin rpio.Pin, p uint32) {
+	pin.DutyCycle(p, 32)
 }
 
 func (driver *L298NDriver) Close() {
 	rpio.Close()
 }
 
-func (driver *L298NDriver) IN1(f bool) {
-	setPin(in1, f)
+func (driver *L298NDriver) IN1(p uint32) {
+	setPin(in1, p)
 }
 
-func (driver *L298NDriver) IN2(f bool) {
-	setPin(in2, f)
+func (driver *L298NDriver) IN2(p uint32) {
+	setPin(in2, p)
 }
 
-func (driver *L298NDriver) IN3(f bool) {
-	setPin(in3, f)
+func (driver *L298NDriver) IN3(p uint32) {
+	setPin(in3, p)
 }
-func (driver *L298NDriver) IN4(f bool) {
-	setPin(in4, f)
-}
-
-func (driver *L298NDriver) EN(f int) {
-	pwm.DutyCycle(uint32(f), 32)
+func (driver *L298NDriver) IN4(p uint32) {
+	setPin(in4, p)
 }

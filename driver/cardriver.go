@@ -50,56 +50,56 @@ func (driver *CarDriver) Run() {
 
 func ToLeft() {
 
-	l298nDriver.IN1(false)
-	l298nDriver.IN2(true)
-	l298nDriver.IN3(true)
-	l298nDriver.IN4(false)
+	l298nDriver.IN1(0)
+	l298nDriver.IN2(calcPwm())
+	l298nDriver.IN3(calcPwm())
+	l298nDriver.IN4(0)
 
 	///右正传 in3=高，in4=低
 	//左倒转 in1=低，in2=低
 }
 func ToRight() {
 
-	l298nDriver.IN3(false)
-	l298nDriver.IN4(true)
-	l298nDriver.IN1(true)
-	l298nDriver.IN2(false)
+	l298nDriver.IN3(0)
+	l298nDriver.IN4(calcPwm())
+	l298nDriver.IN1(calcPwm())
+	l298nDriver.IN2(0)
 	///右不转  in3=低，in4=低
 	//左正转  in1=高，in2=低
 }
 
 func Stop() {
-	l298nDriver.IN3(false)
-	l298nDriver.IN4(false)
-	l298nDriver.IN1(false)
-	l298nDriver.IN2(false)
+	l298nDriver.IN3(0)
+	l298nDriver.IN4(0)
+	l298nDriver.IN1(0)
+	l298nDriver.IN2(0)
 	///右不转  in3=低，in4=低
 	//左不转 in1=低，in2=低
 }
 func ToGO() {
-	l298nDriver.IN3(true)
-	l298nDriver.IN4(false)
-	l298nDriver.IN1(true)
-	l298nDriver.IN2(false)
+	l298nDriver.IN3(calcPwm())
+	l298nDriver.IN4(0)
+	l298nDriver.IN1(calcPwm())
+	l298nDriver.IN2(0)
 	///左正传 in1=高，in2=低
 	//右正传  in3=高，in4=低
 }
 
 func ToLeftBack() {
-	l298nDriver.IN1(true)
-	l298nDriver.IN2(false)
-	l298nDriver.IN3(false)
-	l298nDriver.IN4(true)
+	l298nDriver.IN1(calcPwm())
+	l298nDriver.IN2(0)
+	l298nDriver.IN3(0)
+	l298nDriver.IN4(calcPwm())
 	//左不转 in1=低，in2=低
 	///右倒转  in3=低，in4=高
 }
 
 func ToRightBack() {
 
-	l298nDriver.IN1(false)
-	l298nDriver.IN2(true)
-	l298nDriver.IN3(true)
-	l298nDriver.IN4(false)
+	l298nDriver.IN1(0)
+	l298nDriver.IN2(calcPwm())
+	l298nDriver.IN3(calcPwm())
+	l298nDriver.IN4(0)
 
 	///右不转  in3=低，in4=低
 	///左倒转  in1=低，in2=高
@@ -108,10 +108,10 @@ func ToRightBack() {
 func ToBack() {
 
 	fmt.Print("back:")
-	l298nDriver.IN1(false)
-	l298nDriver.IN2(true)
-	l298nDriver.IN3(false)
-	l298nDriver.IN4(true)
+	l298nDriver.IN1(0)
+	l298nDriver.IN2(calcPwm())
+	l298nDriver.IN3(0)
+	l298nDriver.IN4(calcPwm())
 	///右倒转  in3=低，in4=高
 	///左倒转  in1=低，in2=高
 }
@@ -198,15 +198,23 @@ func (driver *CarDriver) down() {
 
 // 32/4=8
 func (driver *CarDriver) gear() {
+	driver.up()
+	driver.left()
+	driver.right()
+	driver.down()
+}
+
+func calcPwm() uint32 {
 	if gear > 4 || gear < 0 {
 		gear = 0
-		l298nDriver.EN(0)
+		return 0
 	} else if gear <= 4 {
-		l298nDriver.EN(31)
+		return 31
 	} else {
-		l298nDriver.EN(gear * 8)
+		return uint32(gear * 8)
 	}
 }
-func (drier *CarDriver) GetGear() int{
+
+func (drier *CarDriver) GetGear() int {
 	return gear
 }

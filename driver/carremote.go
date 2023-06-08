@@ -68,6 +68,6 @@ func (car *Car) gear(action string) {
 	}
 }
 
-func (car *Car) GetGear() int{
+func (car *Car) GetGear() int {
 	return driver.GetGear()
 }
